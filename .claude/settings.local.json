@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venvScriptspython.exe -m pip install --upgrade pip)",
+      "Bash(.venvScriptspip.exe install -r requirements.txt)",
+      "Bash(python -m pip install:*)",
+      "Bash(python:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(del \"d:\\\\Projects\\\\AI driven\\\\calling_app\\\\frontend\\\\src\\\\temp_layout.txt\" \"d:\\\\Projects\\\\AI driven\\\\calling_app\\\\frontend\\\\src\\\\temp_providers.txt\")"
+    ],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/.env.local)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/*credentials*)",
+      "Read(**/*secrets*)",
+      "Write(**/.env)",
+      "Write(**/.env.*)",
+      "Write(**/.env.local)",
+      "Write(**/*.pem)",
+      "Write(**/*.key)",
+      "Write(**/*credentials*)",
+      "Write(**/*secrets*)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Edit(**/.env.local)",
+      "Edit(**/*.pem)",
+      "Edit(**/*.key)",
+      "Edit(**/*credentials*)",
+      "Edit(**/*secrets*)",
+      "Grep(**/.env)",
+      "Grep(**/.env.*)",
+      "Grep(**/.env.local)",
+      "Grep(**/*.pem)",
+      "Grep(**/*.key)",
+      "Grep(**/*credentials*)",
+      "Grep(**/*secrets*)"
+    ]
+  }
+}
