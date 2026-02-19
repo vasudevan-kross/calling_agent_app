@@ -98,8 +98,8 @@ export default function DashboardPage() {
 
         {/* Stats */}
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {stats.map((stat) => (
-            <Card key={stat.title} className="animate-fade-in">
+          {stats.map((stat, i) => (
+            <Card key={stat.title} className={`animate-slide-up stagger-${i + 1} backdrop-blur-sm bg-white/70 dark:bg-slate-900/60 border-white/60 dark:border-slate-700/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
                       <p className="text-3xl font-bold">{stat.value}</p>
                     )}
                   </div>
-                  <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                  <div className={`p-3 rounded-xl ${stat.bgColor} animate-bounce-subtle`} style={{ animationDelay: `${i * 0.4}s` }}>
                     <stat.icon className={`h-6 w-6 ${stat.color}`} />
                   </div>
                 </div>
@@ -121,13 +121,13 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div>
-          <h2 className="text-2xl font-bold mb-4">Quick Actions</h2>
+          <h2 className="text-2xl font-bold mb-4 animate-slide-up stagger-4">Quick Actions</h2>
           <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {quickActions.map((action) => (
+            {quickActions.map((action, i) => (
               <Link key={action.title} href={action.href}>
-                <Card hover className="h-full animate-fade-in">
+                <Card hover className={`h-full animate-slide-up stagger-${i + 1} backdrop-blur-sm bg-white/60 dark:bg-slate-900/50 border-white/50 dark:border-slate-700/40 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300`}>
                   <CardContent className="p-6">
-                    <div className={`p-3 rounded-lg w-fit mb-4 ${action.color}`}>
+                    <div className={`p-3 rounded-xl w-fit mb-4 ${action.color} animate-float`} style={{ animationDelay: `${i * 0.5}s` }}>
                       <action.icon className="h-6 w-6" />
                     </div>
                     <h3 className="font-semibold mb-1">{action.title}</h3>

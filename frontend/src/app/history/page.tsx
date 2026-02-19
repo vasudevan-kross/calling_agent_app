@@ -294,11 +294,11 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 p-4 sm:p-8">
+    <div className="min-h-screen p-4 sm:p-8">
       <div className="max-w-[1400px] mx-auto space-y-6">
 
         {/* Header */}
-        <div className="flex items-start justify-between flex-wrap gap-4">
+        <div className="flex items-start justify-between flex-wrap gap-4 animate-slide-up stagger-1">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Call Logs</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
@@ -345,7 +345,7 @@ export default function HistoryPage() {
         </div>
 
         {/* Table */}
-        <div className="rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm">
+        <div className="rounded-xl border border-white/60 dark:border-slate-700/50 bg-white/75 dark:bg-slate-900/60 backdrop-blur-md overflow-hidden shadow-lg animate-slide-up stagger-2">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>

@@ -121,59 +121,122 @@
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .text-balance { text-wrap: balance; }
+
+  /* ── Entry ─────────────────────────────────────────── */
+  .animate-fade-in        { animation: fadeIn    0.3s ease-out both; }
+  .animate-slide-up       { animation: slideUp   0.4s ease-out both; }
+  .animate-slide-in-right { animation: slideInRight 0.3s ease-out; }
+
+  /* Stagger delays for lists/grids */
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.10s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.20s; }
+  .stagger-5 { animation-delay: 0.25s; }
+  .stagger-6 { animation-delay: 0.30s; }
+
+  /* ── Float (elements) ──────────────────────────────── */
+  .animate-float         { animation: float        6s  ease-in-out infinite; }
+  .animate-float-slow    { animation: float        9s  ease-in-out infinite; }
+  .animate-float-slower  { animation: float        13s ease-in-out infinite; }
+  .animate-float-reverse { animation: floatReverse 8s  ease-in-out infinite; }
+
+  /* ── Orb drift (background blobs) ─────────────────── */
+  .animate-drift-1 { animation: drift1 18s ease-in-out infinite; }
+  .animate-drift-2 { animation: drift2 22s ease-in-out infinite; }
+  .animate-drift-3 { animation: drift3 26s ease-in-out infinite; }
+  .animate-drift-4 { animation: drift4 20s ease-in-out infinite; }
+
+  /* ── Glow pulse ────────────────────────────────────── */
+  .animate-glow         { animation: glowPulse    3s ease-in-out infinite; }
+  .animate-spin-slow    { animation: spin         12s linear infinite; }
+  .animate-bounce-subtle{ animation: bounceSlight 2s ease-in-out infinite; }
+
+  /* ── Shimmer ───────────────────────────────────────── */
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s ease-in-out infinite;
   }
 
-  .animate-fade-in {
-    animation: fadeIn 0.2s ease-in-out;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
-  }
-
-  .animate-slide-in-right {
-    animation: slideInRight 0.3s ease-out;
-  }
+  /* ─────────────────── Keyframes ──────────────────── */
 
   @keyframes slideInRight {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
   }
-
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
-
   @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0);    }
   }
-
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-12px); }
+    0%, 100% { transform: translateY(0px);   }
+    50%       { transform: translateY(-14px); }
   }
+  @keyframes floatReverse {
+    0%, 100% { transform: translateY(0px);  }
+    50%       { transform: translateY(14px); }
+  }
+  @keyframes drift1 {
+    0%   { transform: translate(0px,   0px)   scale(1);    }
+    25%  { transform: translate(40px, -30px)  scale(1.05); }
+    50%  { transform: translate(20px, -60px)  scale(0.97); }
+    75%  { transform: translate(-20px,-30px)  scale(1.03); }
+    100% { transform: translate(0px,   0px)   scale(1);    }
+  }
+  @keyframes drift2 {
+    0%   { transform: translate(0px,   0px)  scale(1);    }
+    33%  { transform: translate(-50px, 40px) scale(1.08); }
+    66%  { transform: translate(30px,  60px) scale(0.95); }
+    100% { transform: translate(0px,   0px)  scale(1);    }
+  }
+  @keyframes drift3 {
+    0%   { transform: translate(0px,  0px)   scale(1);    }
+    40%  { transform: translate(60px,  50px) scale(1.06); }
+    70%  { transform: translate(-30px, 80px) scale(0.98); }
+    100% { transform: translate(0px,  0px)   scale(1);    }
+  }
+  @keyframes drift4 {
+    0%   { transform: translate(0px,   0px)   scale(1);    }
+    30%  { transform: translate(-40px,-50px)  scale(1.04); }
+    60%  { transform: translate(50px,  -20px) scale(0.96); }
+    100% { transform: translate(0px,   0px)   scale(1);    }
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.45; filter: blur(40px); }
+    50%       { opacity: 0.85; filter: blur(58px); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg);   }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes bounceSlight {
+    0%, 100% { transform: translateY(0);    }
+    50%       { transform: translateY(-5px); }
+  }
+}
 
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
+/* ── Scroll Reveal ───────────────────────────────────────────────── */
+.sr {
+  opacity: 0;
+  transform: translateY(48px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sr.sr-left  { transform: translateX(-48px); }
+.sr.sr-right { transform: translateX(48px); }
+.sr.sr-scale { transform: translateY(24px) scale(0.96); }
+
+.sr.sr-visible {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
 }

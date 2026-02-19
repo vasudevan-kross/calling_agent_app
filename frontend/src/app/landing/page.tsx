@@ -416,6 +416,45 @@ const languages = [
   { code: 'AR', name: 'Arabic', flag: '🇸🇦' },
 ]
 
+// ─── Scroll Reveal ────────────────────────────────────────────────
+function RevealSection({
+  children,
+  className = '',
+  delay = 0,
+  direction = 'up',
+}: {
+  children: React.ReactNode
+  className?: string
+  delay?: number
+  direction?: 'up' | 'left' | 'right' | 'scale'
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          el.style.transitionDelay = delay ? `${delay}ms` : ''
+          el.classList.add('sr-visible')
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [delay])
+
+  const dirClass = direction === 'left' ? 'sr sr-left' : direction === 'right' ? 'sr sr-right' : direction === 'scale' ? 'sr sr-scale' : 'sr'
+  return (
+    <div ref={ref} className={`${dirClass} ${className}`}>
+      {children}
+    </div>
+  )
+}
+
 // ─── Main Landing Page ────────────────────────────────────────────
 export default function LandingPage() {
   const heroText = useTypewriter([
@@ -504,16 +543,18 @@ export default function LandingPage() {
             { value: 10000, suffix: '+', label: 'Calls Supported', icon: Phone },
             { value: 99, suffix: '%', label: 'Uptime', icon: TrendingUp },
             { value: 5, suffix: 'x', label: 'Faster Outreach', icon: Zap },
-          ].map(({ value, suffix, label, icon: Icon }) => (
-            <div key={label} className="text-center space-y-2">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-500/10 mb-2">
-                <Icon className="h-6 w-6 text-indigo-400" />
+          ].map(({ value, suffix, label, icon: Icon }, i) => (
+            <RevealSection key={label} delay={i * 100} direction="scale">
+              <div className="text-center space-y-2">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-500/10 mb-2">
+                  <Icon className="h-6 w-6 text-indigo-400" />
+                </div>
+                <p className="text-4xl font-bold gradient-text">
+                  <AnimatedCounter target={value} suffix={suffix} />
+                </p>
+                <p className="text-secondary font-medium">{label}</p>
               </div>
-              <p className="text-4xl font-bold gradient-text">
-                <AnimatedCounter target={value} suffix={suffix} />
-              </p>
-              <p className="text-secondary font-medium">{label}</p>
-            </div>
+            </RevealSection>
           ))}
         </div>
       </section>
@@ -521,7 +562,7 @@ export default function LandingPage() {
       {/* ── Live Demo Section ─────────────────────────────────── */}
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 space-y-3">
+          <RevealSection className="text-center mb-12 space-y-3">
             <span className="inline-block px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-sm font-medium border border-green-500/20">
               Interactive Demo
             </span>
@@ -529,10 +570,10 @@ export default function LandingPage() {
             <p className="text-secondary max-w-xl mx-auto">
               Click "Start Demo" to simulate an AI cold call flow in real-time
             </p>
-          </div>
+          </RevealSection>
 
           <div className="flex flex-col lg:flex-row items-center gap-12">
-            <div className="flex-1 space-y-6">
+            <RevealSection direction="left" className="flex-1 space-y-6">
               <div className="space-y-4">
                 {[
                   {
@@ -567,11 +608,11 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </RevealSection>
 
-            <div className="flex-shrink-0 w-full lg:w-auto">
+            <RevealSection direction="right" delay={150} className="flex-shrink-0 w-full lg:w-auto">
               <LiveCallDemo />
-            </div>
+            </RevealSection>
           </div>
         </div>
       </section>
@@ -579,7 +620,7 @@ export default function LandingPage() {
       {/* ── Feature Tabs Section ──────────────────────────────── */}
       <section id="features" className="py-20 px-4 bg-gradient-to-b from-transparent to-indigo-500/5">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12 space-y-3">
+          <RevealSection className="text-center mb-12 space-y-3">
             <span className="inline-block px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-sm font-medium border border-indigo-500/20">
               Features
             </span>
@@ -587,10 +628,10 @@ export default function LandingPage() {
             <p className="text-secondary max-w-xl mx-auto">
               From finding leads to booking appointments — one platform handles it all
             </p>
-          </div>
+          </RevealSection>
 
           {/* Tab navigation */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <RevealSection delay={100} className="flex flex-wrap justify-center gap-2 mb-8">
             {featureTabs.map((tab, i) => {
               const Icon = tab.icon
               return (
@@ -608,7 +649,7 @@ export default function LandingPage() {
                 </button>
               )
             })}
-          </div>
+          </RevealSection>
 
           {/* Tab content */}
           {featureTabs.map((tab, i) => (
@@ -647,7 +688,7 @@ export default function LandingPage() {
       {/* ── Language Support Section ───────────────────────────── */}
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 space-y-3">
+          <RevealSection className="text-center mb-12 space-y-3">
             <span className="inline-block px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-sm font-medium border border-purple-500/20">
               Multilingual
             </span>
@@ -655,30 +696,31 @@ export default function LandingPage() {
             <p className="text-secondary max-w-xl mx-auto">
               Native voice synthesis and transcription for 12 languages with automatic fallback providers
             </p>
-          </div>
+          </RevealSection>
 
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-            {languages.map((lang) => (
-              <div
-                key={lang.code}
-                onMouseEnter={() => setHoveredLang(lang.code)}
-                onMouseLeave={() => setHoveredLang(null)}
-                className="glass-card p-4 rounded-xl text-center cursor-pointer transition-all duration-200 hover:scale-105 hover:border-indigo-500/30"
-              >
-                <div className="text-2xl mb-1">{lang.flag}</div>
-                <p className="text-xs font-bold text-indigo-400">{lang.code}</p>
-                <p
-                  className={`text-xs transition-all duration-200 ${
-                    hoveredLang === lang.code ? 'text-foreground opacity-100' : 'text-secondary opacity-70'
-                  }`}
+            {languages.map((lang, i) => (
+              <RevealSection key={lang.code} delay={i * 60} direction="scale">
+                <div
+                  onMouseEnter={() => setHoveredLang(lang.code)}
+                  onMouseLeave={() => setHoveredLang(null)}
+                  className="glass-card p-4 rounded-xl text-center cursor-pointer transition-all duration-200 hover:scale-105 hover:border-indigo-500/30"
                 >
-                  {lang.name}
-                </p>
-              </div>
+                  <div className="text-2xl mb-1">{lang.flag}</div>
+                  <p className="text-xs font-bold text-indigo-400">{lang.code}</p>
+                  <p
+                    className={`text-xs transition-all duration-200 ${
+                      hoveredLang === lang.code ? 'text-foreground opacity-100' : 'text-secondary opacity-70'
+                    }`}
+                  >
+                    {lang.name}
+                  </p>
+                </div>
+              </RevealSection>
             ))}
           </div>
 
-          <div className="mt-8 glass-card p-5 rounded-2xl">
+          <RevealSection delay={200} className="mt-8 glass-card p-5 rounded-2xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center flex-shrink-0">
                 <Bot className="h-5 w-5 text-purple-400" />
@@ -690,19 +732,19 @@ export default function LandingPage() {
                 </p>
               </div>
             </div>
-          </div>
+          </RevealSection>
         </div>
       </section>
 
       {/* ── How It Works ─────────────────────────────────────────── */}
       <section className="py-20 px-4 bg-gradient-to-b from-indigo-500/5 to-transparent">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 space-y-3">
+          <RevealSection className="text-center mb-12 space-y-3">
             <span className="inline-block px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm font-medium border border-blue-500/20">
               How It Works
             </span>
             <h2 className="text-4xl font-bold">From Lead to Conversation in Minutes</h2>
-          </div>
+          </RevealSection>
 
           <div className="relative">
             {/* Connector line */}
@@ -738,17 +780,19 @@ export default function LandingPage() {
                   desc: 'Review transcripts and recordings',
                   color: 'bg-green-500/10 text-green-400 border-green-500/20',
                 },
-              ].map(({ step, icon: Icon, title, desc, color }) => (
-                <div key={step} className="relative flex flex-col items-center text-center space-y-3">
-                  <div className={`relative z-10 w-16 h-16 rounded-2xl border flex items-center justify-center ${color}`}>
-                    <Icon className="h-7 w-7" />
-                    <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">
-                      {step}
+              ].map(({ step, icon: Icon, title, desc, color }, i) => (
+                <RevealSection key={step} delay={i * 120} direction="scale">
+                  <div className="relative flex flex-col items-center text-center space-y-3">
+                    <div className={`relative z-10 w-16 h-16 rounded-2xl border flex items-center justify-center ${color}`}>
+                      <Icon className="h-7 w-7" />
+                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">
+                        {step}
+                      </div>
                     </div>
+                    <h3 className="font-semibold text-lg">{title}</h3>
+                    <p className="text-sm text-secondary">{desc}</p>
                   </div>
-                  <h3 className="font-semibold text-lg">{title}</h3>
-                  <p className="text-sm text-secondary">{desc}</p>
-                </div>
+                </RevealSection>
               ))}
             </div>
           </div>
@@ -758,10 +802,10 @@ export default function LandingPage() {
       {/* ── Additional Features Grid ──────────────────────────── */}
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 space-y-3">
+          <RevealSection className="text-center mb-12 space-y-3">
             <h2 className="text-4xl font-bold">Built for Professionals</h2>
             <p className="text-secondary">Every detail designed to save you time and maximize conversions</p>
-          </div>
+          </RevealSection>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
@@ -801,17 +845,16 @@ export default function LandingPage() {
                 desc: 'Switch between card grid and compact list view for leads',
                 color: 'text-cyan-400 bg-cyan-500/10',
               },
-            ].map(({ icon: Icon, title, desc, color }) => (
-              <div
-                key={title}
-                className="glass-card-hover p-5 rounded-xl space-y-3"
-              >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color}`}>
-                  <Icon className="h-5 w-5" />
+            ].map(({ icon: Icon, title, desc, color }, i) => (
+              <RevealSection key={title} delay={i * 80}>
+                <div className="glass-card-hover p-5 rounded-xl space-y-3 h-full">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color}`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-semibold">{title}</h3>
+                  <p className="text-sm text-secondary">{desc}</p>
                 </div>
-                <h3 className="font-semibold">{title}</h3>
-                <p className="text-sm text-secondary">{desc}</p>
-              </div>
+              </RevealSection>
             ))}
           </div>
         </div>
@@ -820,9 +863,9 @@ export default function LandingPage() {
       {/* ── Testimonial-style quotes ──────────────────────────── */}
       <section className="py-20 px-4 bg-gradient-to-r from-indigo-600/5 via-purple-600/5 to-blue-600/5">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
+          <RevealSection className="text-center mb-12">
             <h2 className="text-4xl font-bold">Why AI Calling?</h2>
-          </div>
+          </RevealSection>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
@@ -843,21 +886,23 @@ export default function LandingPage() {
                 icon: Globe,
                 color: 'text-green-400',
               },
-            ].map(({ quote, author, icon: Icon, color }) => (
-              <div key={author} className="glass-card p-6 rounded-2xl space-y-4">
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-secondary italic leading-relaxed">"{quote}"</p>
-                <div className="flex items-center gap-2 pt-2 border-t border-white/10">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-white/5`}>
-                    <Icon className={`h-4 w-4 ${color}`} />
+            ].map(({ quote, author, icon: Icon, color }, i) => (
+              <RevealSection key={author} delay={i * 120} direction="scale">
+                <div className="glass-card p-6 rounded-2xl space-y-4 h-full">
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
                   </div>
-                  <span className="font-semibold text-sm">{author}</span>
+                  <p className="text-secondary italic leading-relaxed">"{quote}"</p>
+                  <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-white/5`}>
+                      <Icon className={`h-4 w-4 ${color}`} />
+                    </div>
+                    <span className="font-semibold text-sm">{author}</span>
+                  </div>
                 </div>
-              </div>
+              </RevealSection>
             ))}
           </div>
         </div>
@@ -865,7 +910,7 @@ export default function LandingPage() {
 
       {/* ── Final CTA ─────────────────────────────────────────── */}
       <section className="py-24 px-4">
-        <div className="max-w-3xl mx-auto text-center space-y-8">
+        <RevealSection direction="scale" className="max-w-3xl mx-auto text-center space-y-8">
           <div className="relative inline-block">
             <div className="absolute inset-0 blur-3xl bg-indigo-500/20 rounded-full" />
             <h2 className="relative text-5xl font-bold leading-tight">
@@ -894,7 +939,7 @@ export default function LandingPage() {
             </a>
           </div>
           <p className="text-sm text-secondary">No credit card required • Free to get started</p>
-        </div>
+        </RevealSection>
       </section>
 
       {/* ── Footer ────────────────────────────────────────────── */}

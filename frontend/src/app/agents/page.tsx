@@ -57,7 +57,7 @@ export default function AgentsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 p-4 sm:p-8">
+    <div className="min-h-screen p-4 sm:p-8">
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* Header */}
@@ -110,7 +110,7 @@ export default function AgentsPage() {
               return (
                 <div
                   key={agent.id}
-                  className="group relative bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-5 hover:border-blue-300 dark:hover:border-blue-500/50 hover:shadow-lg dark:hover:shadow-blue-500/10 transition-all"
+                  className="group relative bg-white/70 dark:bg-slate-900/60 backdrop-blur-sm rounded-xl border border-white/60 dark:border-slate-700/50 p-5 hover:border-blue-300 dark:hover:border-blue-500/50 hover:shadow-xl hover:-translate-y-1 dark:hover:shadow-blue-500/10 transition-all duration-300 animate-slide-up"
                 >
                   {/* Action buttons */}
                   <div className="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
