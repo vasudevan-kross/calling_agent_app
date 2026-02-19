@@ -103,7 +103,12 @@ export function WebCallDialog({ lead, onClose }: WebCallDialogProps) {
 
     vapi.on('call-start', (callData: any) => {
       callStartTimeRef.current = new Date().toISOString()
-      vapiCallIdRef.current = callData?.id || callData?.call?.id || null
+      // Try every known location the Web SDK may place the call ID
+      vapiCallIdRef.current =
+        callData?.id ||
+        callData?.call?.id ||
+        callData?.callId ||
+        null
       setCallStatus('connected')
       setTranscript([{ role: 'system', content: 'Call connected.' }])
     })
@@ -137,6 +142,13 @@ export function WebCallDialog({ lead, onClose }: WebCallDialogProps) {
         end_time: endTime,
         duration_seconds: durationSeconds,
         status: 'completed'
+      }).then((res: any) => {
+        // Fire Gemini analysis in the background — doesn't block the UI
+        const callId = res?.id
+        if (callId) {
+          fetch(`/api/calls/${callId}/analyze`, { method: 'POST' })
+            .catch(err => console.warn('AI analysis skipped:', err))
+        }
       }).catch(err => console.error('Failed to log call:', err))
 
       setCallStatus('ended')
@@ -154,6 +166,11 @@ export function WebCallDialog({ lead, onClose }: WebCallDialogProps) {
       if (message?.type === 'speech-update') {
         if (message.role === 'assistant') setIsAgentSpeaking(message.status === 'started')
         if (message.role === 'user') setIsSpeaking(message.status === 'started')
+      }
+      // Capture call ID from message events — more reliable than call-start payload
+      const msgCallId = message?.call?.id || message?.callId
+      if (msgCallId && !vapiCallIdRef.current) {
+        vapiCallIdRef.current = msgCallId
       }
       // Recording URL delivered via message
       if (message?.type === 'call-update' && message?.call?.recordingUrl) {

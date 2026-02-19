@@ -83,6 +83,27 @@ async def update_recording_url(call_id: str, body: RecordingUrlUpdate):
     return {"recording_url": body.recording_url}
 
 
+class CallAnalysisUpdate(BaseModel):
+    summary: str
+    ai_score: int
+    qualification: str  # "qualified" | "partial" | "unqualified"
+
+@router.patch("/{call_id}/analysis")
+async def update_call_analysis(call_id: str, body: CallAnalysisUpdate):
+    """Save AI-generated score and summary to a call record"""
+    from app.database import supabase as db
+    # Merge ai_score + qualification into the existing metadata JSON
+    existing = db.table("calls").select("metadata").eq("id", call_id).execute()
+    meta = (existing.data[0].get("metadata") or {}) if existing.data else {}
+    meta["ai_score"]      = body.ai_score
+    meta["qualification"] = body.qualification
+    db.table("calls").update({
+        "summary":  body.summary,
+        "metadata": meta,
+    }).eq("id", call_id).execute()
+    return {"ai_score": body.ai_score, "summary": body.summary, "qualification": body.qualification}
+
+
 @router.get("/lead/{lead_id}")
 async def get_lead_calls(
     lead_id: str,
